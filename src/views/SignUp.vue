@@ -17,9 +17,10 @@ const confirmPassword = ref('')
 const error = ref('')
 const loading = ref(false)
 
-async function handleSignUp() {
+function handleSignUp() {
   error.value = ''
   
+  // Basic validation
   if (!name.value || !email.value || !password.value || !confirmPassword.value) {
     error.value = 'Please fill in all fields'
     return
@@ -37,15 +38,15 @@ async function handleSignUp() {
 
   loading.value = true
   
-  try {
-    const result = authStore.signUp(email.value, password.value, name.value)
-    if (result.success) {
-      router.push('/products')
-    }
-  } catch (err) {
-    error.value = 'Failed to sign up'
-  } finally {
-    loading.value = false
+  // Sign up
+  const result = authStore.signUp(email.value, password.value, name.value)
+  
+  loading.value = false
+  
+  if (result.success) {
+    router.push('/products')
+  } else {
+    error.value = result.error
   }
 }
 </script>

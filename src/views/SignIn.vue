@@ -15,9 +15,10 @@ const password = ref('')
 const error = ref('')
 const loading = ref(false)
 
-async function handleSignIn() {
+function handleSignIn() {
   error.value = ''
   
+  // Basic validation
   if (!email.value || !password.value) {
     error.value = 'Please fill in all fields'
     return
@@ -25,15 +26,15 @@ async function handleSignIn() {
 
   loading.value = true
   
-  try {
-    const result = authStore.signIn(email.value, password.value)
-    if (result.success) {
-      router.push('/products')
-    }
-  } catch (err) {
-    error.value = 'Failed to sign in'
-  } finally {
-    loading.value = false
+  // Sign in
+  const result = authStore.signIn(email.value, password.value)
+  
+  loading.value = false
+  
+  if (result.success) {
+    router.push('/products')
+  } else {
+    error.value = result.error
   }
 }
 </script>
